@@ -1,0 +1,7 @@
+- module HeaderLinksParser
+ -> class method links_to_hash
+
+- class 42API
+ -> constant variables UID_42, SECRET_42, ENDPOINT
+ -> method connection
+ -> method get_request ur, params
