@@ -1,7 +1,17 @@
-- module HeaderLinksParser
- -> class method links_to_hash
+- class HeaderLinks
+ enter : response
+ class or instance methods :
+ -> method next
+ -> method previous ?
+ -> method first ?
+ -> method last ?
 
-- class 42API
- -> constant variables UID_42, SECRET_42, ENDPOINT
- -> method connection
- -> method get_request ur, params
+- class 42APICaller
+ constant variables UID_42, SECRET_42, ENDPOINT
+ class methods :
+ -> method request_locations_for(user, range)
+ -> method request(url)
+
+- class LogtimeComputer
+ enter : user, range (or option ?)
+ -> calculate
