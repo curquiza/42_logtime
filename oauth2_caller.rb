@@ -10,7 +10,7 @@ class OAuth2Caller
 
   def get_request url, params = {}
     response = token.get url, params: params
-    response.parsed
+    {content: response.parsed, links: response.headers["Link"]}
   end
 
   private
