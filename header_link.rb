@@ -10,14 +10,12 @@ class HeaderLink
   private
 
   def self.links_hash response_links
-    links_hsh = Hash.new
-    response_links.split(',').each do |part, index|
-      section = part.split(';')
+    response_links.split(',').each_with_object({}) do |link, hsh|
+      section = link.split(';')
       url = section[0][/<(.*)>/,1]
       name = section[1][/rel="(.*)"/,1].to_sym
-      links_hsh[name] = url
+      hsh[name] = url
     end
-    links_hsh
   end
 
 end
