@@ -1,22 +1,17 @@
-require_relative 'oauth2_caller'
+require_relative 'api_42_caller'
 
-class HeaderLink < OAuth2Caller
+class HeaderLink
 
-  def self.next response
-    links = links_hash response
-    request links[:next]
+  def self.next response_links
+    links = links_hash response_links
+    API42Caller.new.get_request links[:next]
   end
 
   private
 
-  def self.links_hash response
-    links = response.headers["Link"]
-    links_parser links
-  end
-
-  def self.links_parser
+  def self.links_hash response_links
     links_hsh = Hash.new
-    str.split(',').each do |part, index|
+    response_links.split(',').each do |part, index|
       section = part.split(';')
       url = section[0][/<(.*)>/,1]
       name = section[1][/rel="(.*)"/,1].to_sym
