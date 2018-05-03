@@ -3,11 +3,12 @@ require_relative 'header_link'
 require 'pry'
 
 def total_logtime_hours
-  response = API42Caller.new.request_locations_for('curquiza', '2017-01-01,2018-01-10')
-  total = logtime_hours_in response[:content]
+  response = API42Caller.new.request_locations_for('curquiza', '2018-04-01,2018-04-10')
+  total = logtime_hours_in(response[:content])
   while (response = HeaderLink.next response[:links])
     total += logtime_hours_in response[:content]
   end
+  total
 end
 
 def logtime_hours_in content_hash
