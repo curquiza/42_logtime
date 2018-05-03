@@ -1,4 +1,5 @@
 require_relative 'api_42_caller'
+require_relative 'header_link'
 require 'pry'
 
 def total_logtime_hours

@@ -35,8 +35,16 @@ parsed_response = response.parsed
 header_links = response.headers["Link"]
 # puts parsed_response
 # puts "\n"
-puts header_links
+puts "HEADER" + header_links
 links_hash = APIParser.parse_link_header header_links
-puts links_hash
-response_2 = token.get(links_hash[:last])
-puts response_2.parsed
+# puts links_hash
+puts "NEXT" + links_hash[:last].to_s
+puts "LAST" + links_hash[:next].to_s
+puts "FIRST" + links_hash[:first].to_s
+puts "PREVIOUS" + links_hash[:prev].to_s
+
+response_2 = token.get(links_hash[:next])
+# puts response_2.parsed
+header_links = response_2.headers["Link"]
+puts "HEADER" + header_links
+links_hash = APIParser.parse_link_header header_links
