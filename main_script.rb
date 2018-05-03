@@ -1,11 +1,8 @@
 require_relative 'api_42_caller'
 require 'pry'
 
-<<<<<<< Updated upstream
-puts API42Caller.new.request_locations_for('curquiza', '2017-01-01,2018-04-10')
-=======
 def total_logtime_hours
-  response = API42Caller.new.request_locations_for('curquiza', '2017-01-01,2018-04-10')
+  response = API42Caller.new.request_locations_for('curquiza', '2017-01-01,2018-01-10')
   total = logtime_hours_in response[:content]
   while (response = HeaderLink.next response[:links])
     total += logtime_hours_in response[:content]
@@ -34,4 +31,3 @@ end
 # puts response_next[:content]
 
 puts total_logtime_hours
->>>>>>> Stashed changes
