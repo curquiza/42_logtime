@@ -3,9 +3,9 @@ require_relative 'api_42_caller'
 class HeaderLink
 
   def self.next response_links
-    links = links_hash response_links
-    if links[:next]
-      API42Caller.new.get_request links[:next]
+    if response_links
+      links = links_hash response_links
+      API42Caller.new.get_request links[:next] if links[:next]
     end
   end
 
