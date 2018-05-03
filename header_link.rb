@@ -4,7 +4,9 @@ class HeaderLink
 
   def self.next response_links
     links = links_hash response_links
-    API42Caller.new.get_request links[:next]
+    if links[:next]
+      API42Caller.new.get_request links[:next]
+    end
   end
 
   private
