@@ -21,8 +21,7 @@ class LogtimeCalculator
           puts "rslt = #{ rslt }"
           break if rslt == 0
           total += rslt
-          puts "total = #{ total }"
-          puts "---"
+          puts "total = #{ total }\n---"
           sleep(0.5)
         end
       end
