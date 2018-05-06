@@ -23,6 +23,7 @@ class LogtimeCalculator
           total += rslt
           puts "total = #{ total }"
           puts "----------"
+          sleep(0.5)
         end
       end
       total
