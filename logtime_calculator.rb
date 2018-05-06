@@ -16,7 +16,9 @@ class LogtimeCalculator
     def calc_through_pagination total, response
       unless total == 0
         while (response = HeaderLink.next response[:links])
-          total += logtime_hours_in response[:content]
+          rslt = logtime_hours_in response[:content]
+          break if rslt == 0
+          total += rslt
         end
       end
       total
