@@ -8,13 +8,19 @@ class LogtimeCalculator
     def total_logtime_hours user, range
       response = API42Caller.new.request_locations_for(user, range)
       total = logtime_hours_in(response[:content])
-      while (response = HeaderLink.next response[:links])
-        total += logtime_hours_in response[:content]
-      end
-      total
+      calc_through_pagination total, response
     end
 
     private
+
+    def calc_through_pagination total, response
+      unless total == 0
+        while (response = HeaderLink.next response[:links])
+          total += logtime_hours_in response[:content]
+        end
+      end
+      total
+    end
 
     def logtime_hours_in content_hash
       content_hash.sum do |line|
