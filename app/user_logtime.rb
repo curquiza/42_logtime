@@ -8,7 +8,7 @@ class UserLogtime
     @user  = user
     @year  = params[:year] || Time.now.year
     @range = determine_range params
-    puts "RANGE = #{ range }\n-----"
+    # puts "RANGE = #{ range }\n-----"
   end
 
   def compute
