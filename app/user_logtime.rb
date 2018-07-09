@@ -18,7 +18,7 @@ class UserLogtime
   private
 
   def determine_range params
-    quarter_ranges["q#{ params[:quarter] }"] || quarter_ranges[:default]
+    quarter_ranges["q#{ params[:quarter] }".to_sym] || quarter_ranges[:default]
   end
 
   def quarter_ranges
