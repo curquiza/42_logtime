@@ -18,10 +18,12 @@ realtime_client = Slack::RealTime::Client.new
 realtime_client.on :message do |data|
   p "message : #{data.text}"
   request = MessageParser.new(data.text)
-  puts "login = #{request.login}"
-  puts "quarter id = #{request.quarter}"
-  puts "year = #{request.year}"
-  rslt = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter}).compute
-  puts rslt
+  # puts "login = #{request.login}"
+  # puts "quarter id = #{request.quarter}"
+  # puts "year = #{request.year}"
+  user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
+  puts "range = #{ user_logtime.range }\n"
+  rslt = user_logtime.compute
+  puts "rslt = #{ rslt }\n-----"
 end
 realtime_client.start!
