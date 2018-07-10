@@ -8,8 +8,8 @@ class MessageParser
     @words = message.split(' ')
     if valid_command && get_login
       @login = get_login
-      @quarter = get_quarter_id
       @year = get_year
+      @quarter = get_quarter_id
     else
       puts 'throw exception'
     end
@@ -29,19 +29,19 @@ class MessageParser
     words[1]
   end
 
+  def get_year
+    words[2] if words[2].match(/^201\d$/)
+  end
+
   def get_quarter_id
     get_quarter[1] if get_quarter
   end
 
   def get_quarter
-    if QUARTERS.include? words[2]
-      words[2]
+    to_use = get_year ? words[3] : words[2]
+    if QUARTERS.include? to_use
+      to_use
     end
-  end
-
-  def get_year
-    to_use = get_quarter ? words[3] : words[2]
-    to_use if to_use && to_use.match(/^201\d$/)
   end
 
 end

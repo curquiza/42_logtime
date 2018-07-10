@@ -6,7 +6,7 @@ def usage_message
   '!logtime [login]                           -> current year from the beginning of the year.
   or !logtime [login] [year]                  -> from the beginning of the year.
   or !logtime [login] [Q1/Q2/Q3/Q4]           -> current year.
-  or !logtime [login] [Q1/Q2/Q3/Q4] [year]'
+  or !logtime [login] [year] [Q1/Q2/Q3/Q4]'
 end
 
 Slack.configure do |config|
