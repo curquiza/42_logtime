@@ -1,1 +1,1 @@
-worker : ruby app/slack_bot.rb
+worker: ruby app/slack_bot.rb
