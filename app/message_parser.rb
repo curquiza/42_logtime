@@ -6,20 +6,12 @@ class MessageParser
 
   def initialize message
     @words = message.split(' ')
-    if get_login
-      @login = get_login
-      @year = get_year
-      @quarter = get_quarter_id
-    else
-      throw StandardError
-    end
+    @login = get_login
+    @year = get_year
+    @quarter = get_quarter_id
   end
 
   private
-
-  def command
-    words.first
-  end
 
   def get_login
     words[1]

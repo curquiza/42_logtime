@@ -5,13 +5,11 @@ require_relative 'user_logtime'
 LOGTIME_CMD = '!logtime'
 
 def error_message
-  '*Une ~erreur~ feature est survenue* :cute:
+  "*Une ~erreur~ _action totalement maitrisée_ est survenue* :cute:\n\n" + usage_message
+end
 
-  usage :
-  `!logtime [login]`
-  `!logtime [login] [year]`
-  `!logtime [login] [q1/q2/q3/q4]`
-  `!logtime [login] [year] [q1/q2/q3/q4]`'
+def usage_message
+  "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime [login]`\n" + "> `!logtime [login] [year]`\n" + "> `!logtime [login] [q1/q2/q3/q4]`\n" + '> `!logtime [login] [year] [q1/q2/q3/q4]`'
 end
 
 def get_user users_list, user_id
@@ -58,15 +56,21 @@ client.on :message do |data|
     begin
       puts "message : #{data.text} - user : #{ get_user(users_list, data.user) }"
       request = MessageParser.new(data.text)
-      user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
-      puts "range = #{ user_logtime.range }\n"
-      rslt = user_logtime.compute
-      puts "rslt = #{ rslt }\n-----"
-      client.message channel: data.channel, text: germaine_talk(rslt.round, user_logtime.range)
+      if request.login
+        user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
+        puts "range = #{ user_logtime.range }\n"
+        rslt = user_logtime.compute
+        puts "rslt = #{ rslt }"
+        client.message channel: data.channel, text: germaine_talk(rslt.round, user_logtime.range)
+      else
+        client.message channel: data.channel, text: usage_message
+        puts 'usage'
+      end
     rescue StandardError
       client.message channel: data.channel, text: error_message
-      puts '------'
+      puts 'error'
     end
+    puts '------'
   end
 end
 client.start!
