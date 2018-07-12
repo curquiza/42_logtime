@@ -11,7 +11,7 @@ class MessageParser
       @year = get_year
       @quarter = get_quarter_id
     else
-      puts 'throw exception'
+      throw StandardError
     end
   end
 
