@@ -36,6 +36,7 @@ class LogtimeCalculator
     end
 
     def hours_btw_two_dates str_1, str_2
+      str_1 ||= Time.now.to_s
       (str_to_time(str_1) - str_to_time(str_2)) / 3600
     end
 

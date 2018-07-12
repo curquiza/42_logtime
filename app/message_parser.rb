@@ -26,7 +26,7 @@ class MessageParser
   end
 
   def get_year
-    words[2] if words[2].match(/^201\d$/)
+    words[2] if words[2] && words[2].match(/^201\d$/)
   end
 
   def get_quarter_id
