@@ -6,7 +6,7 @@ class MessageParser
 
   def initialize message
     @words = message.split(' ')
-    if valid_command && get_login
+    if get_login
       @login = get_login
       @year = get_year
       @quarter = get_quarter_id
@@ -16,10 +16,6 @@ class MessageParser
   end
 
   private
-
-  def valid_command
-    command == '!logtime'
-  end
 
   def command
     words.first
