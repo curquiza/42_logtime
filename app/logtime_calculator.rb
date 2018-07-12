@@ -8,7 +8,7 @@ class LogtimeCalculator
     def total_logtime_hours user, range
       response = API42Caller.new.request_locations_for(user, range)
       total = logtime_hours_in(response[:content])
-      puts "FIRST -> total = #{ total }\n---"
+      # puts "FIRST -> total = #{ total }\n---"
       calc_through_pagination total, response
     end
 
@@ -18,14 +18,14 @@ class LogtimeCalculator
       unless total == 0
         while (response = HeaderLink.next response[:links])
           rslt = logtime_hours_in response[:content]
-          puts "rslt = #{ rslt }"
+          # puts "rslt = #{ rslt }"
           break if rslt == 0
           total += rslt
-          puts "total = #{ total }\n---"
+          # puts "total = #{ total }\n---"
           sleep(0.5)
         end
       end
-      puts "FINAL --> total = #{ total }\n-----"
+      # puts "FINAL --> total = #{ total }\n-----"
       total
     end
 
@@ -36,6 +36,7 @@ class LogtimeCalculator
     end
 
     def hours_btw_two_dates str_1, str_2
+      str_1 ||= Time.now.to_s
       (str_to_time(str_1) - str_to_time(str_2)) / 3600
     end
 

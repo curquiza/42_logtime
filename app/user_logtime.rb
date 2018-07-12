@@ -8,7 +8,7 @@ class UserLogtime
     @user  = user
     @year  = params[:year] || Time.now.year
     @range = determine_range params
-    puts "RANGE = #{ range }\n-----"
+    # puts "RANGE = #{ range }\n-----"
   end
 
   def compute
@@ -18,7 +18,7 @@ class UserLogtime
   private
 
   def determine_range params
-    quarter_ranges["q#{ params[:quarter] }"] || quarter_ranges[:default]
+    quarter_ranges["q#{ params[:quarter] }".to_sym] || quarter_ranges[:default]
   end
 
   def quarter_ranges
