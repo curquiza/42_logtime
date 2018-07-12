@@ -13,7 +13,7 @@ class BotExecutor
 
   def execute
     begin
-      puts "message : \"#{data.text}\" - user : #{ get_user_name(data.user) }"
+      puts "message : \"#{data.text}\" - user : #{ get_user_name(data.user) } - date : #{ DateTime.strptime(data.ts,'%s') }"
       request = MessageParser.new(data.text)
       request.login ? get_hours_rslt(request) : put_usage
     rescue OAuth2::Error
@@ -81,7 +81,7 @@ class BotExecutor
   end
 
   def usage_message
-    "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime <login> [year] [q1/q2/q3/q4]`"
+    "> Pour discuter avec Germaine :smirk: :\n" + "> `!logtime <login> [year] [q1/q2/q3/q4]`"
   end
 
 
