@@ -54,7 +54,7 @@ end
 client.on :message do |data|
   if valid_command data.text
     begin
-      puts "message : #{data.text} - user : #{ get_user(users_list, data.user) }"
+      puts "message : \"#{data.text}\" - user : #{ get_user(users_list, data.user) }"
       request = MessageParser.new(data.text)
       if request.login
         user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
@@ -66,9 +66,9 @@ client.on :message do |data|
         client.message channel: data.channel, text: usage_message
         puts 'usage'
       end
-    rescue StandardError
+    rescue StandardError => e
       client.message channel: data.channel, text: error_message
-      puts 'error'
+      puts e
     end
     puts '------'
   end
