@@ -16,8 +16,10 @@ class BotExecutor
       puts "message : \"#{data.text}\" - user : #{ get_user_name(data.user) }"
       request = MessageParser.new(data.text)
       request.login ? get_hours_rslt(request) : put_usage
+    rescue OAuth2::Error
+      put_login_error
     rescue StandardError
-      manage_errors
+      put_undefined_errors
     end
     puts '-----'
   end
@@ -37,9 +39,14 @@ class BotExecutor
     puts 'usage'
   end
 
-  def manage_errors
-    realtime_client.message channel: data.channel, text: error_message
-    puts 'error'
+  def put_login_error
+    realtime_client.message channel: data.channel, text: login_error_message
+    puts 'bad login'
+  end
+
+  def put_undefined_errors
+    realtime_client.message channel: data.channel, text: undefined_error_message
+    puts 'undefined error'
   end
 
   def get_user_name user_id
@@ -65,8 +72,12 @@ class BotExecutor
     end
   end
 
-  def error_message
-    "*Une ~erreur~ _action totalement maitrisée_ est survenue* :cute:\n\n" + usage_message
+  def undefined_error_message
+    "*Une ~erreur~ _action totalement maitrisée_ est survenue* :cute:"
+  end
+
+  def login_error_message
+    "Ce login n'existe pas ! :face_with_monocle:"
   end
 
   def usage_message
