@@ -9,7 +9,7 @@ def error_message
 end
 
 def usage_message
-  "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime [login]`\n" + "> `!logtime [login] [year]`\n" + "> `!logtime [login] [q1/q2/q3/q4]`\n" + '> `!logtime [login] [year] [q1/q2/q3/q4]`'
+  "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime <login> [year] [q1/q2/q3/q4]`"
 end
 
 def get_user users_list, user_id
