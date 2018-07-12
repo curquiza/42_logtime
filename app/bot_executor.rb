@@ -15,11 +15,6 @@ class BotExecutor
     begin
       puts "message : \"#{data.text}\" - user : #{ get_user_name(data.user) }"
       request = MessageParser.new(data.text)
-      # if request.login
-      #   get_hours_rslt request
-      # else
-      #   put_usage
-      # end
       request.login ? get_hours_rslt(request) : put_usage
     rescue StandardError
       manage_errors
