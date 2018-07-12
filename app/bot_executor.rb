@@ -1,0 +1,82 @@
+require_relative 'message_parser'
+require_relative 'user_logtime'
+
+class BotExecutor
+
+  attr_reader :realtime_client, :web_client, :data
+
+  def initialize realtime_client, web_client, data
+    @realtime_client = realtime_client
+    @web_client      = web_client
+    @data            = data
+  end
+
+  def execute
+    begin
+      puts "message : \"#{data.text}\" - user : #{ get_user_name(data.user) }"
+      request = MessageParser.new(data.text)
+      # if request.login
+      #   get_hours_rslt request
+      # else
+      #   put_usage
+      # end
+      request.login ? get_hours_rslt(request) : put_usage
+    rescue StandardError
+      manage_errors
+    end
+    puts '-----'
+  end
+
+  private
+
+  def get_hours_rslt request
+    user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
+    puts "range : #{ user_logtime.range }\n"
+    rslt = user_logtime.compute
+    puts "rslt : #{ rslt }"
+    realtime_client.message channel: data.channel, text: germaine_talk(rslt.round, user_logtime.range)
+  end
+
+  def put_usage
+    realtime_client.message channel: data.channel, text: usage_message
+    puts 'usage'
+  end
+
+  def manage_errors
+    realtime_client.message channel: data.channel, text: error_message
+    puts 'error'
+  end
+
+  def get_user_name user_id
+    users_list = web_client.users_list
+    user = users_list['members'].select { |list| list['id'] == user_id }.first['name']
+  end
+
+  def range_begin range
+    date_start = Time.parse range.split(',').first
+    date_start.strftime("%m/%d/%Y")
+  end
+
+  def range_end range
+    date_end = Time.parse range.split(',').last
+    date_end.strftime("%m/%d/%Y")
+  end
+
+  def germaine_talk rslt, range
+    if rslt == 0
+      "Tu n'étais *pas* à l'école entre le #{ range_begin(range) } et le #{ range_end(range) } !! :angry:"
+    else
+      "J'ai pu te voir seulement *#{ rslt } #{ rslt == 1 ? "heure" : "heures" }* à l'école entre le #{ range_begin(range) } et le #{ range_end(range) }..."
+    end
+  end
+
+  def error_message
+    "*Une ~erreur~ _action totalement maitrisée_ est survenue* :cute:\n\n" + usage_message
+  end
+
+  def usage_message
+    "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime <login> [year] [q1/q2/q3/q4]`"
+  end
+
+
+end

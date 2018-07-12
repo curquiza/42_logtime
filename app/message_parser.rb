@@ -5,9 +5,9 @@ class MessageParser
   QUARTERS = %w(q1 q2 q3 q4 Q1 Q2 Q3 Q4)
 
   def initialize message
-    @words = message.split(' ')
-    @login = get_login
-    @year = get_year
+    @words   = message.split(' ')
+    @login   = get_login
+    @year    = get_year
     @quarter = get_quarter_id
   end
 

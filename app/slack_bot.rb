@@ -1,76 +1,28 @@
 require 'slack-ruby-client'
-require_relative 'message_parser'
-require_relative 'user_logtime'
+require_relative 'bot_executor'
 
 LOGTIME_CMD = '!logtime'
 
-def error_message
-  "*Une ~erreur~ _action totalement maitrisée_ est survenue* :cute:\n\n" + usage_message
-end
-
-def usage_message
-  "> Pour discuter avec germaine :smirk: :\n" + "> `!logtime <login> [year] [q1/q2/q3/q4]`"
-end
-
-def get_user users_list, user_id
-  user = users_list['members'].select { |list| list['id'] == user_id }.first['name']
-end
-
 def valid_command text
   text.split(' ').first == LOGTIME_CMD
-end
-
-def range_begin range
-  date_start = Time.parse range.split(',').first
-  date_start.strftime("%m/%d/%Y")
-end
-
-def range_end range
-  date_end = Time.parse range.split(',').last
-  date_end.strftime("%m/%d/%Y")
-end
-
-def germaine_talk rslt, range
-  if rslt == 0
-    "Tu n'étais *pas* à l'école entre le #{ range_begin(range) } et le #{ range_end(range) } !! :angry:"
-  else
-    "J'ai pu te voir seulement *#{ rslt } #{ rslt == 1 ? "heure" : "heures" }* à l'école entre le #{ range_begin(range) } et le #{ range_end(range) }..."
-  end
 end
 
 Slack.configure do |config|
   config.token = ENV['SLACK_API_TOKEN']
 end
 
-client = Slack::RealTime::Client.new
+realtime_client = Slack::RealTime::Client.new
 web_client = Slack::Web::Client.new
-users_list = web_client.users_list
 
-client.on :hello do
-  puts "Successfully connected - login: '#{client.self.name}' - team : '#{client.team.name}' - https://#{client.team.domain}.slack.com."
+realtime_client.on :hello do
+  puts "Successfully connected - login: '#{realtime_client.self.name}' - team : '#{realtime_client.team.name}' - https://#{realtime_client.team.domain}.slack.com."
   puts '-----'
 end
 
-client.on :message do |data|
+realtime_client.on :message do |data|
   if valid_command data.text
-    begin
-      puts "message : \"#{data.text}\" - user : #{ get_user(users_list, data.user) }"
-      request = MessageParser.new(data.text)
-      if request.login
-        user_logtime = UserLogtime.new(request.login, {year: request.year, quarter: request.quarter})
-        puts "range = #{ user_logtime.range }\n"
-        rslt = user_logtime.compute
-        puts "rslt = #{ rslt }"
-        client.message channel: data.channel, text: germaine_talk(rslt.round, user_logtime.range)
-      else
-        client.message channel: data.channel, text: usage_message
-        puts 'usage'
-      end
-    rescue StandardError => e
-      client.message channel: data.channel, text: error_message
-      puts e
-    end
-    puts '------'
+    bot = BotExecutor.new realtime_client, web_client, data
+    bot.execute
   end
 end
-client.start!
+realtime_client.start!
